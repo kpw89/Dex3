@@ -1,3 +1,4 @@
+/*
 package clss.ffied.kwest.dex3.Adapeter
 
 import android.view.LayoutInflater
@@ -9,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import clss.ffied.kwest.dex3.R
 import clss.ffied.kwest.dex3.entities.Category
 
-class CategoryAdapter(val categories : List<Category>): RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
+class CategoryAdapter(): RecyclerView.Adapter<CategoryAdapter.CategoryHolder>() {
 
 
 
@@ -27,9 +28,11 @@ class CategoryAdapter(val categories : List<Category>): RecyclerView.Adapter<Cat
 
     override fun getItemCount() = categories.size
 
-    /*class CategoryHolder(val view : View) : RecyclerView.ViewHolder(view){
+    */
+/*class CategoryHolder(val view : View) : RecyclerView.ViewHolder(view){
         
-    }*/
+    }*//*
+
 
     class CategoryHolder(inflater: LayoutInflater, parent: ViewGroup) :
             RecyclerView.ViewHolder(inflater.inflate(R.layout.category_item_layout, parent, false)) {
@@ -47,4 +50,4 @@ class CategoryAdapter(val categories : List<Category>): RecyclerView.Adapter<Cat
 
     }
 
-}
+}*/

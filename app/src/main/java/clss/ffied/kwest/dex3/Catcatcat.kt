@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import clss.ffied.kwest.dex3.Adapeter.CategoryAdapter
+//import clss.ffied.kwest.dex3.Adapeter.CategoryAdapter
+import clss.ffied.kwest.dex3.Adapeter.New_CategoryAdapter
 import clss.ffied.kwest.dex3.entities.Category
 import clss.ffied.kwest.dex3.entities.Databasee
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +25,7 @@ class Catcatcat : AppCompatActivity() {
         setContentView(R.layout.activity_catcatcat)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recview_category)
-        val adapter = CategoryAdapter()
+        val adapter = New_CategoryAdapter()
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
