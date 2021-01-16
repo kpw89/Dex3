@@ -19,7 +19,7 @@ class ViewModel_Category(private val repository: CatRepository): ViewModel() {
 
 
 
-class WordViewModelFactory(private val repository: CatRepository) : ViewModelProvider.Factory {
+class CatViewModelFactory(private val repository: CatRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ViewModel_Category::class.java)) {
             @Suppress("UNCHECKED_CAST")

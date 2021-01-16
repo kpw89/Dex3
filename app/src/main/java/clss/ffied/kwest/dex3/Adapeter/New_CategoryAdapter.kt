@@ -15,6 +15,10 @@ class New_CategoryAdapter: ListAdapter<Category, New_CategoryAdapter.CategoryVie
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         return CategoryViewHolder.create(parent)
     }
+    //add this shit for sum reasn
+    override fun submitList(list: List<Category>?) {
+        super.submitList(list?.let { ArrayList(it) })
+    }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val current = getItem(position)

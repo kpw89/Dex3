@@ -25,4 +25,9 @@ interface CategoryDao {
 
     @Query("SELECT * FROM category_table ORDER BY title ASC")
     fun getAlphabetizedCategories(): Flow<List<Category>>
+
+    @Query("SELECT * FROM category_table WHERE title LIKE :title")
+    fun findByTitle(title: String): LiveData<List<Category>>
+
+
 }

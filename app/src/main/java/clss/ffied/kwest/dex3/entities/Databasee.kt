@@ -16,21 +16,23 @@ abstract class Databasee :RoomDatabase() {
     companion object{
         @Volatile
         private var INSTANCE : clss.ffied.kwest.dex3.entities.Databasee? = null
-    }
-    fun getDatabase(context: Context): clss.ffied.kwest.dex3.entities.Databasee{
-        val tempInstance = INSTANCE
-        if(tempInstance != null){
-            return  tempInstance
+
+        fun getDatabase(context: Context): clss.ffied.kwest.dex3.entities.Databasee{
+            val tempInstance = INSTANCE
+            if(tempInstance != null){
+                return  tempInstance
+            }
+            synchronized(this){
+                val instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        Databasee::class.java,
+                        "item_database"
+                ).build()
+                INSTANCE = instance
+                return instance
+            }
         }
-        synchronized(this){
-            val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    Databasee::class.java,
-                    "item_database"
-            ).build()
-            INSTANCE = instance
-            return instance
-        }
     }
+
 
 }
