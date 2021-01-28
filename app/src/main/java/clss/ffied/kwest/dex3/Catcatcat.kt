@@ -37,7 +37,7 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catcatcat)
 
-        val et_cat_title = findViewById<EditText>(R.id.et_title_cat)
+
         val btn_new_cat = findViewById<Button>(R.id.btn_new_cat)
 
 
@@ -68,7 +68,7 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
 
         btn_new_cat.setOnClickListener() {
             CoroutineScope(Dispatchers.IO).launch {
-                addCategory(et_cat_title.text.toString(), db)
+                addCategory( db)
             }
 
         }
@@ -79,19 +79,19 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
 
 
     override fun onItemClick(position: Int) {
-        Toast.makeText(this,"pos: "+position.toString(),Toast.LENGTH_SHORT).show()
-        Toast.makeText(this,"id: "+testarray.get(position).id_cat.toString(),Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this,"pos: "+position.toString(),Toast.LENGTH_SHORT).show()
+       // Toast.makeText(this,"id: "+testarray.get(position).id_cat.toString(),Toast.LENGTH_SHORT).show()
       //  Toast.makeText(this,"txt: "+testarray.get(position).title,Toast.LENGTH_SHORT).show()
 
-
+//HOLD TO DELETE
 
         ///HIER WEITER
-       /* val intent = Intent(applicationContext, Itemitemitem::class.java)
-        intent.putExtra("position",position)
-        startActivity(intent)*/
+        val intent = Intent(applicationContext, Itemitemitem::class.java)
+        intent.putExtra("catid",testarray.get(position).id_cat)
+        startActivity(intent)
     }
 
-     suspend fun addCategory(et_title: String, db: Databasee){
+     suspend fun addCategory( db: Databasee){
 
          CoroutineScope(Dispatchers.IO).launch {
              val intent = Intent(applicationContext, Cat_Insert::class.java)

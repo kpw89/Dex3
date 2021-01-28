@@ -11,5 +11,5 @@ data class Item (
     val id_item : Long,
     val id_category : Long,
     val title : String,
-    val contentx : String,
+
 )

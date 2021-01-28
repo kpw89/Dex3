@@ -50,13 +50,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    suspend fun addUser(et_title: EditText, et_content:EditText ,db :Databasee){
+    /*suspend fun addUser(et_title: EditText, et_content:EditText ,db :Databasee){
         var title = et_title.text.toString()
         var content = et_content.text.toString()
-        val item = Item(0,0L,title,content)
+        val item = Item(0,0L,title)
         db.itemDao().addItem(item)
 
-    }
+    }*/
 
    /* suspend fun addCategory(et_title: EditText, db: Databasee){
         var title = et_title.text.toString()
