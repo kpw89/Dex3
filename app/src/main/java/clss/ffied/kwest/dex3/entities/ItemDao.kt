@@ -1,10 +1,7 @@
 package clss.ffied.kwest.dex3.entities
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface ItemDao {
@@ -15,4 +12,7 @@ interface ItemDao {
     @Query("SELECT * FROM item_table ORDER BY id_item ASC")
     fun readAllItems(): LiveData<List<Item>>
 
+    @Transaction
+    @Query("SELECT * FROM item_table ORDER BY id_item DESC")
+    fun getItems(): List<Item>
 }
