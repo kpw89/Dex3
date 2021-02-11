@@ -9,6 +9,9 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addCategory(category: Category)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addItem(item: Item)
+
     /*@Query("SELECT * FROM category_table ORDER BY id_cat ASC")
     fun readAllItems(): LiveData<List<Item>>*/
 
@@ -20,7 +23,7 @@ interface CategoryDao {
     @Query("SELECT * FROM category_table ORDER BY id_cat DESC")
     fun getCategories(): List<Category>
 
-    @Query("SELECT * FROM category_table WHERE id_cat=:id ")
+    @Query("SELECT * FROM category_table WHERE id_cat=:id  ")
     fun loadSingle(id: Long): Category
 
     @Query("SELECT * FROM category_table ORDER BY title ASC")

@@ -13,9 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class Cat_Insert : AppCompatActivity() {
+open class Cat_Insert : AppCompatActivity() {
 
-    private var db: Databasee? = null
+    var db: Databasee? = null
     private var catDao: CategoryDao? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +43,7 @@ class Cat_Insert : AppCompatActivity() {
                 val category = Category(0, title.text.toString())
                 addCategoryToDb(db,category)
                 val intent = Intent(applicationContext, Catcatcat::class.java)
+
                 startActivity(intent)
             }
 

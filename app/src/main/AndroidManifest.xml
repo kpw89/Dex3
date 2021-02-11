@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dex3">
-        <activity android:name=".Item_Insert"></activity>
+        <activity android:name=".Inginging"></activity>
+        <activity android:name=".Item_Insert" />
         <activity android:name=".Adapeter.Item_Insert" />
         <activity android:name=".Itemitemitem" />
         <activity android:name=".Cat_Insert" />

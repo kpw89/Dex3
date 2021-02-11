@@ -8,7 +8,7 @@ data class Cat_with_Items (
         @Embedded val category: Category,
         @Relation(
                 parentColumn = "id_cat",
-                entityColumn = "id_category"
+                entityColumn = "id_cat"
         )
         val items: List<Item>
 )

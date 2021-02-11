@@ -23,41 +23,40 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
     private var catDao: CategoryDao? = null
     var testarray = mutableListOf<Item>()
     var adapter : New_ItemAdapter? = New_ItemAdapter(testarray,this)
-
+    var cat_id =0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_itemitemitem)
 
         //position is not id
         //kind_entities.get(position).getId()
-        val cat_id = intent.getLongExtra("catid",0)
+        cat_id = intent.getLongExtra("catid",0)
         Toast.makeText(this, "cat id : "+ cat_id.toString(),Toast.LENGTH_SHORT).show()
 
-
+        val recyclerView = findViewById<RecyclerView>(R.id.recview_item)
         val btn_newItem : Button = findViewById(R.id.btn_new_item)
-
-        btn_newItem.setOnClickListener() {
-            CoroutineScope(Dispatchers.IO).launch {
-                db?.let { it1 -> addItem(it1) }
-            }
-        }
-
-
-
 
         val db = Room.databaseBuilder(
             applicationContext,
             Databasee::class.java, "item_database"
         ).build()
 
-        GlobalScope.launch {
-            var data = db.itemDao().getItems()
-            data?.forEach { testarray.add(it) }
-            adapter!!.submitList(testarray.toMutableList())
+        btn_newItem.setOnClickListener() {
+            CoroutineScope(Dispatchers.IO).launch {
+                addItem(db)
+            }
         }
 
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recview_category)
+
+
+
+
+        GlobalScope.launch {
+            var data = db.itemDao().getItemsbyCatid(cat_id)
+            data?.forEach { testarray.add(it) }
+            adapter!!.submitList(testarray.toMutableList())
+        }
 
 
 
@@ -74,7 +73,10 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
 
         CoroutineScope(Dispatchers.IO).launch {
             val intent = Intent(applicationContext, Item_Insert::class.java)
+            intent.putExtra("catid",cat_id)
             startActivity(intent)
+            //val intent = Intent(applicationContext, Item_Insert::class.java)
+           // startActivity(intent)
         }
 
     }
