@@ -68,6 +68,14 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
 
     }
 
+    override fun onItemClick(position: Int) {
+//HOLD TO DELETE
+
+        ///HIER WEITER
+        val intent = Intent(applicationContext, Inginging::class.java)
+        intent.putExtra("itemid",testarray.get(position).id_item)
+        startActivity(intent)
+    }
 
     suspend fun addItem( db: Databasee){
 

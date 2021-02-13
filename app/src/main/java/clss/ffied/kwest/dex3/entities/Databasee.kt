@@ -12,6 +12,7 @@ abstract class Databasee :RoomDatabase() {
 
     abstract fun itemDao() : ItemDao
     abstract fun catDao()  : CategoryDao
+    abstract fun ingredientDao() : IngredientDao
 
     companion object{
         @Volatile
