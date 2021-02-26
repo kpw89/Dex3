@@ -74,6 +74,7 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
         ///HIER WEITER
         val intent = Intent(applicationContext, Inginging::class.java)
         intent.putExtra("itemid",testarray.get(position).id_item)
+        intent.putExtra("catid",cat_id)
         startActivity(intent)
     }
 
@@ -87,5 +88,10 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
            // startActivity(intent)
         }
 
+    }
+
+    override fun onBackPressed(){
+        val intent = Intent(applicationContext, Catcatcat::class.java)
+        startActivity(intent)
     }
 }

@@ -22,6 +22,6 @@ interface IngredientDao {
      fun getItems(): List<Item>*/
 
     @Transaction
-    @Query("SELECT * FROM ingredient_table Where id_ingredient = :id_ingredient ORDER BY title ASC")
-    fun getIngredientsbyItemId(id_ingredient:Long): List<Ingredient>
+    @Query("SELECT * FROM ingredient_table Where id_item = :id_item ORDER BY title ASC")
+    fun getIngredientsbyItemId(id_item:Long): List<Ingredient>
 }

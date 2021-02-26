@@ -12,6 +12,9 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addItem(item: Item)
 
+    @Delete
+    suspend fun delete(category: Category)
+
     /*@Query("SELECT * FROM category_table ORDER BY id_cat ASC")
     fun readAllItems(): LiveData<List<Item>>*/
 
