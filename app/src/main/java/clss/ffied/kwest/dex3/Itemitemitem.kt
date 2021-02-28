@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import clss.ffied.kwest.dex3.Adapeter.New_ItemAdapter
+import clss.ffied.kwest.dex3.entities.Category
 import clss.ffied.kwest.dex3.entities.CategoryDao
 import clss.ffied.kwest.dex3.entities.Databasee
 import clss.ffied.kwest.dex3.entities.Item
@@ -24,6 +25,8 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
     var testarray = mutableListOf<Item>()
     var adapter : New_ItemAdapter? = New_ItemAdapter(testarray,this)
     var cat_id =0L
+    var deleteModee = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_itemitemitem)
@@ -35,6 +38,7 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recview_item)
         val btn_newItem : Button = findViewById(R.id.btn_new_item)
+        val btn_item_del : Button = findViewById(R.id.btn_item_delete)
 
         val db = Room.databaseBuilder(
             applicationContext,
@@ -44,6 +48,12 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
         btn_newItem.setOnClickListener() {
             CoroutineScope(Dispatchers.IO).launch {
                 addItem(db)
+            }
+        }
+
+        btn_item_del.setOnClickListener(){
+            CoroutineScope(Dispatchers.IO).launch {
+                deleteModee = true
             }
         }
 
@@ -72,10 +82,34 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
 //HOLD TO DELETE
 
         ///HIER WEITER
-        val intent = Intent(applicationContext, Inginging::class.java)
+        /*val intent = Intent(applicationContext, Inginging::class.java)
         intent.putExtra("itemid",testarray.get(position).id_item)
         intent.putExtra("catid",cat_id)
-        startActivity(intent)
+        startActivity(intent)*/
+
+        if (deleteModee){
+            //db?.catDao()?.delete(testarray.get(position))
+
+            CoroutineScope(Dispatchers.IO).launch {
+                var db1 = Room.databaseBuilder(
+                        applicationContext,
+                        Databasee::class.java, "item_database"
+                ).build()
+                deleteFromCategoryToDb(db1,testarray.get(position))
+            }
+            Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(applicationContext, Itemitemitem::class.java)
+            intent.putExtra("catid",cat_id)
+            startActivity(intent)
+        }
+        else{
+            val intent = Intent(applicationContext, Inginging::class.java)
+            //intent.putExtra("catid",testarray.get(position).id_cat)
+            intent.putExtra("itemid",testarray.get(position).id_item)
+            intent.putExtra("catid",cat_id)
+            startActivity(intent)
+        }
+
     }
 
     suspend fun addItem( db: Databasee){
@@ -88,6 +122,12 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
            // startActivity(intent)
         }
 
+    }
+
+    suspend fun deleteFromCategoryToDb(db : Databasee, item: Item){
+        CoroutineScope(Dispatchers.IO).launch {
+            db.itemDao().delete(item)
+        }
     }
 
     override fun onBackPressed(){

@@ -27,6 +27,7 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
     var item_id =0L
     var sizeing: String?=null
     var cat_id =0L
+    var deleteModee = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,10 +37,11 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
         //kind_entities.get(position).getId()
         item_id = intent.getLongExtra("itemid",0)
         cat_id = intent.getLongExtra("catid",0)
-        Toast.makeText(this, "item id : "+ item_id.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "catid : "+ cat_id.toString(), Toast.LENGTH_SHORT).show()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recview_ingredient)
         val btn_newIngredient : Button = findViewById(R.id.btn_new_ingredient)
+        val btn_delete_ing : Button = findViewById(R.id.btn_ing_delete)
 
         val db = Room.databaseBuilder(
                 applicationContext,
@@ -62,6 +64,11 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
         }
 
 
+        btn_delete_ing.setOnClickListener(){
+            CoroutineScope(Dispatchers.IO).launch {
+                deleteModee = true
+            }
+        }
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -70,9 +77,25 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
 
     //test
     override fun onItemClick(position: Int) {
-        Toast.makeText(this,testarray.get(position).id_item.toString(),Toast.LENGTH_SHORT).show()
-        Toast.makeText(this,"size ing "+ sizeing,Toast.LENGTH_SHORT).show()
+       /* Toast.makeText(this,testarray.get(position).id_item.toString(),Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"size ing "+ sizeing,Toast.LENGTH_SHORT).show()*/
+        if (deleteModee){
+            CoroutineScope(Dispatchers.IO).launch {
+                var db1 = Room.databaseBuilder(
+                        applicationContext,
+                        Databasee::class.java, "item_database"
+                ).build()
+                deleteFromIngToDb(db1,testarray.get(position))
+            }
+            Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(applicationContext, Inginging::class.java)
+            intent.putExtra("itemid",item_id)
+            intent.putExtra("catid", cat_id)
+            startActivity(intent)
+        }
+        else{
 
+        }
     }
 
 
@@ -81,6 +104,7 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
         CoroutineScope(Dispatchers.IO).launch {
             val intent = Intent(applicationContext, Ing_Insert::class.java)
             intent.putExtra("itemid",item_id)
+            intent.putExtra("catid",cat_id)
             startActivity(intent)
         }
 
@@ -90,5 +114,11 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
         val intent = Intent(applicationContext, Itemitemitem::class.java)
         intent.putExtra("catid",cat_id)
         startActivity(intent)
+    }
+
+    suspend fun deleteFromIngToDb(db : Databasee, ingredient: Ingredient){
+        CoroutineScope(Dispatchers.IO).launch {
+            db.ingredientDao().delete(ingredient)
+        }
     }
 }

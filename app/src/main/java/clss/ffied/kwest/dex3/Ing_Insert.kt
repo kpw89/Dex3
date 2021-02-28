@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 class Ing_Insert : Cat_Insert() {
 
     var item_id=0L
+    var cat_id=0L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ing__insert)
@@ -26,6 +27,7 @@ class Ing_Insert : Cat_Insert() {
 
         var title = et_cat_title
         item_id = intent.getLongExtra("itemid",0)
+        cat_id = intent.getLongExtra("catid",0)
 
         val db = Room.databaseBuilder(
                 applicationContext,
@@ -39,6 +41,7 @@ class Ing_Insert : Cat_Insert() {
                 addIngredientToDb(db,ingredient)
                 val intent = Intent(applicationContext, Inginging::class.java)
                 intent.putExtra("itemid",item_id)
+                intent.putExtra("catid",cat_id)
                 startActivity(intent)
             }
 

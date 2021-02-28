@@ -10,6 +10,9 @@ interface IngredientDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addIngredient(ingredient: Ingredient)
 
+    @Delete
+    suspend fun delete(ingredient: Ingredient)
+
    /* @Query("SELECT * FROM ingredient_table ORDER BY id_ingredient ASC")
     fun readAllIngredients(): LiveData<List<Ingredient>>*/
 
