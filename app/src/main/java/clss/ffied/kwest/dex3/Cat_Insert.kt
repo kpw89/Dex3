@@ -3,8 +3,10 @@ package clss.ffied.kwest.dex3
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.room.Room
 import clss.ffied.kwest.dex3.entities.Category
 import clss.ffied.kwest.dex3.entities.CategoryDao
@@ -28,24 +30,37 @@ open class Cat_Insert : AppCompatActivity() {
         var title = et_cat_title
         val category = Category(0, title.toString())
 
-
-        /*db.catDao().addCategory(category)*/
+        var cat_id = intent.getLongExtra("catid",0)
+        var editmode = intent.getBooleanExtra("editmode",false)
+        Toast.makeText(applicationContext,"catid: "+cat_id.toString(),Toast.LENGTH_SHORT).show()
 
         val db = Room.databaseBuilder(
             applicationContext,
             Databasee::class.java, "item_database"
         ).build()
 
+        if (editmode){
+            CoroutineScope(Dispatchers.IO).launch {
+                var edittext = editCategory(db,cat_id)
+                //Toast.makeText(applicationContext,"editext: "+edittext,Toast.LENGTH_SHORT).show()
+                this@Cat_Insert.runOnUiThread(java.lang.Runnable {
+                    et_cat_title.setText(edittext)
+                })
+            }
+        }
+
 
         btn_insert_cat.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                var title = et_cat_title
-                val category = Category(0, title.text.toString())
-                addCategoryToDb(db,category)
-                val intent = Intent(applicationContext, Catcatcat::class.java)
 
-                startActivity(intent)
-            }
+                CoroutineScope(Dispatchers.IO).launch {
+                    var title = et_cat_title
+                    val category = Category(0, title.text.toString())
+                    addCategoryToDb(db,category)
+                    val intent = Intent(applicationContext, Catcatcat::class.java)
+                    startActivity(intent)
+                }
+
+
 
         }
 
@@ -55,6 +70,14 @@ open class Cat_Insert : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             db.catDao().addCategory(category)
         }
+    }
+
+    suspend fun editCategory(db: Databasee, id:Long): String{
+        var tit :String="test function of edit category"
+        CoroutineScope(Dispatchers.IO).launch {
+            tit= db.catDao().loadSingle(id).title
+        }
+        return tit
     }
 
 }

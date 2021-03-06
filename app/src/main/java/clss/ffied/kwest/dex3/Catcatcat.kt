@@ -32,6 +32,7 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
     var testarray = mutableListOf<Category>()
     var adapter : New_CategoryAdapter? = New_CategoryAdapter(testarray,this)
     var deleteModee = false
+    var editModee = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
 
         val btn_new_cat = findViewById<Button>(R.id.btn_new_cat)
         val btn_del_cat = findViewById<Button>(R.id.btn_cat_del)
+        val btn_edit = findViewById<Button>(R.id.btn_cat_edit)
 
 
         var db = Room.databaseBuilder(
@@ -65,7 +67,11 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
 
 
 
-
+        btn_edit.setOnClickListener(){
+            CoroutineScope(Dispatchers.IO).launch {
+                editModee = true
+            }
+        }
 
         btn_new_cat.setOnClickListener() {
             CoroutineScope(Dispatchers.IO).launch {
@@ -85,29 +91,43 @@ class Catcatcat : AppCompatActivity(), New_CategoryAdapter.onItemClickListener {
 
     override fun onItemClick(position: Int) {
        //click marks card , then decide per button to delete or add
-
-//HOLD TO DELETE
-
-        ///HIER WEITER
-        if (deleteModee){
-            //db?.catDao()?.delete(testarray.get(position))
-
+//send long cat_id to cat_insert
+        if (editModee){
             CoroutineScope(Dispatchers.IO).launch {
                 var db1 = Room.databaseBuilder(
-                    applicationContext,
-                    Databasee::class.java, "item_database"
+                        applicationContext,
+                        Databasee::class.java, "item_database"
                 ).build()
-                deleteFromCategoryToDb(db1,testarray.get(position))
             }
-            Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(applicationContext, Catcatcat::class.java)
+            var id = testarray.get(position).id_cat
+            Toast.makeText(this,"Edit Mode ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(applicationContext, Cat_Insert::class.java)
+            intent.putExtra("catid",id)
+            intent.putExtra("editmode",true)
             startActivity(intent)
         }
         else{
-            val intent = Intent(applicationContext, Itemitemitem::class.java)
-            intent.putExtra("catid",testarray.get(position).id_cat)
-            startActivity(intent)
+            if (deleteModee){
+                //db?.catDao()?.delete(testarray.get(position))
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    var db1 = Room.databaseBuilder(
+                            applicationContext,
+                            Databasee::class.java, "item_database"
+                    ).build()
+                    deleteFromCategoryToDb(db1,testarray.get(position))
+                }
+                Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
+                val intent = Intent(applicationContext, Catcatcat::class.java)
+                startActivity(intent)
+            }
+            else{
+                val intent = Intent(applicationContext, Itemitemitem::class.java)
+                intent.putExtra("catid",testarray.get(position).id_cat)
+                startActivity(intent)
+            }
         }
+
 
     }
 

@@ -34,11 +34,22 @@
         android:id="@+id/btn_cat_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
         android:layout_marginBottom="8dp"
         android:text="Delete"
         app:layout_constraintBottom_toTopOf="@+id/btn_new_cat"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_cat_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Edit"
+        app:layout_constraintBottom_toTopOf="@+id/btn_new_cat"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.556"
+        app:layout_constraintStart_toEndOf="@+id/btn_cat_del" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
