@@ -12,6 +12,9 @@ interface CategoryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addItem(item: Item)
 
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateCategory(category: Category)
+
     @Delete
     suspend fun delete(category: Category)
 

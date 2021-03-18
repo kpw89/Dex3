@@ -20,6 +20,7 @@ open class Cat_Insert : AppCompatActivity() {
     var db: Databasee? = null
     private var catDao: CategoryDao? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cat__insert)
@@ -41,10 +42,9 @@ open class Cat_Insert : AppCompatActivity() {
 
         if (editmode){
             CoroutineScope(Dispatchers.IO).launch {
-                var edittext = editCategory(db,cat_id)
-                //Toast.makeText(applicationContext,"editext: "+edittext,Toast.LENGTH_SHORT).show()
+                var edittext = editCategory(db,db.catDao().loadSingle(cat_id).title)
                 this@Cat_Insert.runOnUiThread(java.lang.Runnable {
-                    et_cat_title.setText(edittext)
+                    et_cat_title.setText(edittext.toString())
                 })
             }
         }
@@ -52,6 +52,20 @@ open class Cat_Insert : AppCompatActivity() {
 
         btn_insert_cat.setOnClickListener {
 
+            if (editmode){
+                CoroutineScope(Dispatchers.IO).launch {
+                    var title1 = et_cat_title.text.toString()   ///doesnt get editext but something weird like full description of widget
+
+                    this@Cat_Insert.runOnUiThread(java.lang.Runnable {
+                        Toast.makeText(applicationContext,title1,Toast.LENGTH_SHORT).show()
+                    })
+                    db.catDao().updateCategory(updateCat(db,cat_id,title1.toString()))
+
+                    val intent = Intent(applicationContext, Catcatcat::class.java)
+                    startActivity(intent)
+                }
+            }
+            else{
                 CoroutineScope(Dispatchers.IO).launch {
                     var title = et_cat_title
                     val category = Category(0, title.text.toString())
@@ -59,6 +73,8 @@ open class Cat_Insert : AppCompatActivity() {
                     val intent = Intent(applicationContext, Catcatcat::class.java)
                     startActivity(intent)
                 }
+            }
+
 
 
 
@@ -72,12 +88,16 @@ open class Cat_Insert : AppCompatActivity() {
         }
     }
 
-    suspend fun editCategory(db: Databasee, id:Long): String{
+    suspend fun editCategory(db: Databasee,  title:String):String{
         var tit :String="test function of edit category"
-        CoroutineScope(Dispatchers.IO).launch {
-            tit= db.catDao().loadSingle(id).title
-        }
+        tit = title
         return tit
+    }
+
+    suspend fun updateCat( db: Databasee ,id:Long, title: String): Category{
+        var category = db.catDao().loadSingle(id)
+        category.title = title
+        return category
     }
 
 }
