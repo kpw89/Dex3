@@ -27,4 +27,9 @@ interface ItemDao {
     @Query("SELECT * FROM item_table Where id_cat = :id_cat ORDER BY title ASC")
     fun getItemsbyCatid(id_cat:Long): List<Item>
 
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateItem(item: Item)
+
+    @Query("SELECT * FROM item_table WHERE id_item=:id  ")
+    fun loadSingle(id: Long): Item
 }

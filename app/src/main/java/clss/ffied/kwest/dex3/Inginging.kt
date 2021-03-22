@@ -28,6 +28,7 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
     var sizeing: String?=null
     var cat_id =0L
     var deleteModee = false
+    var editModee = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +43,7 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
         val recyclerView = findViewById<RecyclerView>(R.id.recview_ingredient)
         val btn_newIngredient : Button = findViewById(R.id.btn_new_ingredient)
         val btn_delete_ing : Button = findViewById(R.id.btn_ing_delete)
+        val btn_edit = findViewById<Button>(R.id.btn_ingredient_edit)
 
         val db = Room.databaseBuilder(
                 applicationContext,
@@ -70,6 +72,12 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
             }
         }
 
+        btn_edit.setOnClickListener(){
+            CoroutineScope(Dispatchers.IO).launch {
+                editModee = true
+            }
+        }
+
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -79,23 +87,44 @@ class Inginging : AppCompatActivity(), New_IngredientAdapter.onItemClickListener
     override fun onItemClick(position: Int) {
        /* Toast.makeText(this,testarray.get(position).id_item.toString(),Toast.LENGTH_SHORT).show()
         Toast.makeText(this,"size ing "+ sizeing,Toast.LENGTH_SHORT).show()*/
-        if (deleteModee){
+        if (editModee){
             CoroutineScope(Dispatchers.IO).launch {
                 var db1 = Room.databaseBuilder(
-                        applicationContext,
-                        Databasee::class.java, "item_database"
+                    applicationContext,
+                    Databasee::class.java, "item_database"
                 ).build()
-                deleteFromIngToDb(db1,testarray.get(position))
             }
-            Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(applicationContext, Inginging::class.java)
-            intent.putExtra("itemid",item_id)
-            intent.putExtra("catid", cat_id)
+            //var id = testarray.get(position).id_cat
+            var id2 = testarray.get(position).id_item
+            var id3 = testarray.get(position).id_ingredient
+            Toast.makeText(this,"Edit Mode ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(applicationContext, Ing_Insert::class.java)
+            intent.putExtra("catid",cat_id)
+            intent.putExtra("itemid",id2)
+            intent.putExtra("editmode",true)
+            intent.putExtra("ingid",id3)
             startActivity(intent)
         }
         else{
+            if (deleteModee){
+                CoroutineScope(Dispatchers.IO).launch {
+                    var db1 = Room.databaseBuilder(
+                        applicationContext,
+                        Databasee::class.java, "item_database"
+                    ).build()
+                    deleteFromIngToDb(db1,testarray.get(position))
+                }
+                Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
+                val intent = Intent(applicationContext, Inginging::class.java)
+                intent.putExtra("itemid",item_id)
+                intent.putExtra("catid", cat_id)
+                startActivity(intent)
+            }
+            else{
 
+            }
         }
+
     }
 
 

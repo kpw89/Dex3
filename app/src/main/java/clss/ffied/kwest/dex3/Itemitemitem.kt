@@ -25,7 +25,9 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
     var testarray = mutableListOf<Item>()
     var adapter : New_ItemAdapter? = New_ItemAdapter(testarray,this)
     var cat_id =0L
+    var item_id =0L
     var deleteModee = false
+    var editModee = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +36,13 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
         //position is not id
         //kind_entities.get(position).getId()
         cat_id = intent.getLongExtra("catid",0)
+        item_id = intent.getLongExtra("itemid",0)
         Toast.makeText(this, "cat id : "+ cat_id.toString(),Toast.LENGTH_SHORT).show()
 
         val recyclerView = findViewById<RecyclerView>(R.id.recview_item)
         val btn_newItem : Button = findViewById(R.id.btn_new_item)
         val btn_item_del : Button = findViewById(R.id.btn_item_delete)
+        val btn_edit = findViewById<Button>(R.id.btn_item_edit)
 
         val db = Room.databaseBuilder(
             applicationContext,
@@ -54,6 +58,11 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
         btn_item_del.setOnClickListener(){
             CoroutineScope(Dispatchers.IO).launch {
                 deleteModee = true
+            }
+        }
+        btn_edit.setOnClickListener(){
+            CoroutineScope(Dispatchers.IO).launch {
+                editModee = true
             }
         }
 
@@ -86,29 +95,47 @@ class Itemitemitem : AppCompatActivity(), New_ItemAdapter.onItemClickListener {
         intent.putExtra("itemid",testarray.get(position).id_item)
         intent.putExtra("catid",cat_id)
         startActivity(intent)*/
-
-        if (deleteModee){
-            //db?.catDao()?.delete(testarray.get(position))
-
+        if (editModee){
             CoroutineScope(Dispatchers.IO).launch {
                 var db1 = Room.databaseBuilder(
                         applicationContext,
                         Databasee::class.java, "item_database"
                 ).build()
-                deleteFromCategoryToDb(db1,testarray.get(position))
             }
-            Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(applicationContext, Itemitemitem::class.java)
-            intent.putExtra("catid",cat_id)
+            var id = testarray.get(position).id_cat
+            var id2 = testarray.get(position).id_item
+            Toast.makeText(this,"Edit Mode ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(applicationContext, Item_Insert::class.java)
+            intent.putExtra("catid",id)
+            intent.putExtra("itemid",id2)
+            intent.putExtra("editmode",true)
             startActivity(intent)
         }
         else{
-            val intent = Intent(applicationContext, Inginging::class.java)
-            //intent.putExtra("catid",testarray.get(position).id_cat)
-            intent.putExtra("itemid",testarray.get(position).id_item)
-            intent.putExtra("catid",cat_id)
-            startActivity(intent)
+            if (deleteModee){
+                //db?.catDao()?.delete(testarray.get(position))
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    var db1 = Room.databaseBuilder(
+                            applicationContext,
+                            Databasee::class.java, "item_database"
+                    ).build()
+                    deleteFromCategoryToDb(db1,testarray.get(position))
+                }
+                Toast.makeText(this,"delete Mode ", Toast.LENGTH_SHORT).show()
+                val intent = Intent(applicationContext, Itemitemitem::class.java)
+                intent.putExtra("catid",cat_id)
+                startActivity(intent)
+            }
+            else{
+                val intent = Intent(applicationContext, Inginging::class.java)
+                //intent.putExtra("catid",testarray.get(position).id_cat)
+                intent.putExtra("itemid",testarray.get(position).id_item)
+                intent.putExtra("catid",cat_id)
+                startActivity(intent)
+            }
         }
+
 
     }
 

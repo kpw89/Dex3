@@ -7,9 +7,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "item_table")
 data class Item (
-    @PrimaryKey(autoGenerate = true)
+        @PrimaryKey(autoGenerate = true)
     val id_item : Long,
-    val id_cat : Long,
-    val title : String,
+        val id_cat : Long,
+        var title : String,
 
-)
+        )

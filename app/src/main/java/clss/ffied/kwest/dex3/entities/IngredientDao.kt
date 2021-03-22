@@ -27,4 +27,10 @@ interface IngredientDao {
     @Transaction
     @Query("SELECT * FROM ingredient_table Where id_item = :id_item ORDER BY title ASC")
     fun getIngredientsbyItemId(id_item:Long): List<Ingredient>
+
+    @Query("SELECT * FROM ingredient_table WHERE id_ingredient=:id  ")
+    fun loadSingle(id: Long): Ingredient
+
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateIngredient(ingredient: Ingredient)
 }
